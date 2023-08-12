@@ -30,12 +30,12 @@ class AppointmentResource extends Resource
                             ->native(false),
                         Forms\Components\TimePicker::make('start')
                             ->required()
-                            ->secionds(false)
-                            ->displayformate('h:i A'),
+                            ->seconds(false)
+                            ->displayformat('h:i A'),
                         Forms\Components\TimePicker::make('end')
                             ->required()
-                            ->secionds(false)
-                            ->displayformate('h:i A'),
+                            ->seconds(false)
+                            ->displayformat('h:i A'),
                         Forms\Components\Select::make('pet_id')
                             ->required()
                             ->relationship('pet', 'name')
@@ -53,10 +53,10 @@ class AppointmentResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('pet.name')
-                    ->seachable()
+                    ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('description')
-                    ->seachable()
+                    ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('date')
                     ->date('M d Y')

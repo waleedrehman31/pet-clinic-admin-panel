@@ -28,7 +28,7 @@ class PetResource extends Resource
                     Forms\Components\FileUpload::make('avatar')
                         ->image()
                         ->imageEditor(),
-                    Forms\Components\TextInput::make('nme')
+                    Forms\Components\TextInput::make('name')
                         ->required(),
                     Forms\Components\DatePicker::make('date_of_birth')
                         ->required()
