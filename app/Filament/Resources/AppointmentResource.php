@@ -12,6 +12,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Enums\AppointmentStatus;
 
 class AppointmentResource extends Resource
 {
@@ -42,7 +43,11 @@ class AppointmentResource extends Resource
                             ->searchable()
                             ->preload(),
                         Forms\Components\TextInput::make('description')
-                            ->required()
+                            ->required(),
+                        Forms\Components\Select::make('status')
+                            ->natvie(false)
+                            ->options(AppointmentStatus::class)
+                            ->visibleOn(Pages\EditAppointment::class),
                     ]
                 )
             ]);
@@ -70,6 +75,7 @@ class AppointmentResource extends Resource
                     ->label('To')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('status')
+                    ->badge()
                     ->sortable()
 
             ])
@@ -77,6 +83,22 @@ class AppointmentResource extends Resource
                 //
             ])
             ->actions([
+                Tables\Actions\Action::make('Confirm')
+                    ->action(function (Appointment $record) {
+                        $record->status = AppointmentStatus::Confirmed;
+                        $record->save();
+                    })
+                    ->visible(fn (Appointment $record) => $record-> status == AppointmentStatus::Created)
+                    ->color('success')
+                    ->icon('heroicon-o-check'),
+                Tables\Actions\Action::make('Cancel')
+                    ->action(function (Appointment $record) {
+                        $record->status = AppointmentStatus::Canceled;
+                        $record->save();
+                    })
+                    ->visible(fn (Appointment $record) => $record-> status != AppointmentStatus::Canceled)
+                    ->color('danger')
+                    ->icon('heroicon-o-x-mark'),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
