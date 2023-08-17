@@ -18,7 +18,7 @@ class AppointmentResource extends Resource
 {
     protected static ?string $model = Appointment::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-calendar-days';
 
     public static function form(Form $form): Form
     {
@@ -88,7 +88,7 @@ class AppointmentResource extends Resource
                         $record->status = AppointmentStatus::Confirmed;
                         $record->save();
                     })
-                    ->visible(fn (Appointment $record) => $record-> status == AppointmentStatus::Created)
+                    ->visible(fn (Appointment $record) => $record->status == AppointmentStatus::Created)
                     ->color('success')
                     ->icon('heroicon-o-check'),
                 Tables\Actions\Action::make('Cancel')
@@ -96,7 +96,7 @@ class AppointmentResource extends Resource
                         $record->status = AppointmentStatus::Canceled;
                         $record->save();
                     })
-                    ->visible(fn (Appointment $record) => $record-> status != AppointmentStatus::Canceled)
+                    ->visible(fn (Appointment $record) => $record->status != AppointmentStatus::Canceled)
                     ->color('danger')
                     ->icon('heroicon-o-x-mark'),
                 Tables\Actions\EditAction::make(),
