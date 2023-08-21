@@ -11,14 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::dropIfExists('appointments');
-        Schema::create('appointments', function (Blueprint $table) {
+        Schema::create('roles', function (Blueprint $table) {
             $table->id();
-            $table->date('date');
-            $table->time('start');
-            $table->time('end');
+            $table->string('name');
             $table->string('description');
-            $table->foreignId('pet_id')->constrained('pets')->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -28,8 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('pets', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('roles');
     }
 };

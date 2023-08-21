@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Clinic;
+use App\Models\Pet;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -11,8 +13,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('appointments', function (Blueprint $table) {
-            $table->string('status')->default('created');
+        Schema::table('clinic_pet', function (Blueprint $table) {
+            $table->foreignIdFor(Clinic::class);
+            $table->foreignIdFor(Pet::class);
         });
     }
 
@@ -21,6 +24,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::table('clinic_pet', function (Blueprint $table) {
+            //
+        });
     }
 };
