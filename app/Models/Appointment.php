@@ -25,4 +25,9 @@ class Appointment extends Model
     {
         return $this->belongsToMany(Clinic::class);
     }
+
+    public function slot(): BelongsTo
+    {
+        return $this->belongsTo(Slot::class);
+    }
 }
