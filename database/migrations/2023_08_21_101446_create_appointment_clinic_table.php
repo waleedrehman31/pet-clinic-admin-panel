@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('appointment_clinic', function (Blueprint $table) {
+        Schema::create('appointment_clinic', function (Blueprint $table) {
             $table->foreignIdFor(Clinic::class);
             $table->foreignIdFor(Appointment::class);
         });
