@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Owner\Pages\Auth\Register;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -26,6 +27,7 @@ class OwnerPanelProvider extends PanelProvider
             ->id('owner')
             ->path('owner')
             ->login()
+            ->registration(Register::class)
             ->colors([
                 'primary' => Color::Amber,
             ])

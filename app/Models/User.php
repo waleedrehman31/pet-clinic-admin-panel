@@ -82,7 +82,7 @@ class User extends Authenticatable implements HasTenants, FilamentUser
         $role = auth()->user()->role->name;
         return match ($panel->getId()) {
             'admin' => $role === 'admin' || $role === 'doctor',
-            'owner' => $role === 'admin' || $role === 'owner ',
+            'owner' => $role === 'admin' || $role === 'owner',
         };
     }
 }
