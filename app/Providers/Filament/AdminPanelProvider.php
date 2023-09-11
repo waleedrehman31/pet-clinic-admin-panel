@@ -18,6 +18,7 @@ use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use App\Models\Clinic;
+use App\Filament\Pages\Tenancy\RegisterClinic;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -31,6 +32,7 @@ class AdminPanelProvider extends PanelProvider
             ->registration()
             ->passwordReset()
             ->tenant(Clinic::class)
+            ->tenantRegistration(RegisterClinic::class)
             ->colors([
                 'primary' => Color::Emerald,
             ])
