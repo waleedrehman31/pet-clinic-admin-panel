@@ -2,17 +2,21 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\AppointmentResource\Pages;
-use App\Filament\Resources\AppointmentResource\RelationManagers;
-use App\Models\Appointment;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
+use App\Models\Role;
+use App\Models\Slot;
 use Filament\Tables;
+use Filament\Forms\Get;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use App\Models\Appointment;
+use Filament\Facades\Filament;
+use App\Enums\AppointmentStatus;
+use Filament\Resources\Resource;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Enums\AppointmentStatus;
+use App\Filament\Resources\AppointmentResource\Pages;
+use App\Filament\Resources\AppointmentResource\RelationManagers;
 
 class AppointmentResource extends Resource
 {
@@ -22,30 +26,40 @@ class AppointmentResource extends Resource
 
     public static function form(Form $form): Form
     {
+        $doctorRole = Role::whereName('doctor')->first();
         return $form
             ->schema([
                 Forms\Components\Section::make(
                     [
-                        Forms\Components\DatePicker::make('date')
-                            ->required()
-                            ->native(false),
-                        Forms\Components\TimePicker::make('start')
-                            ->required()
-                            ->seconds(false)
-                            ->displayformat('h:i A'),
-                        Forms\Components\TimePicker::make('end')
-                            ->required()
-                            ->seconds(false)
-                            ->displayformat('h:i A'),
                         Forms\Components\Select::make('pet_id')
                             ->required()
                             ->relationship('pet', 'name')
                             ->searchable()
                             ->preload(),
+                        Forms\Components\DatePicker::make('date')
+                            ->required()
+                            ->native(false)
+                            ->live(),
+                        Forms\Components\Select::make('doctor_id')
+                            ->options(function (Get $get) use ($doctorRole) {
+                                Filament::getTenant()
+                                    ->users()
+                                    ->whereBelongsTo($doctorRole)
+                                    ->whereHas('schedules', function(Builder $query) use($get) {
+                                        $query->where('date', $get('date'));
+                                    })
+                                    ->get()
+                                    ->pluck('name', 'id');
+                            })
+                            ->hidden(fn (Get $get) => blank($get('date'))),
+                        Forms\Components\Select::make('slot_id')
+                            ->native(false)
+                            ->relationship(name: 'slot', titleAttribute: 'start')
+                            ->getOptionLabelFromRecordUsing(fn (Slot $record) => $record->start->format('h:i  A')),
                         Forms\Components\TextInput::make('description')
                             ->required(),
                         Forms\Components\Select::make('status')
-                            ->natvie(false)
+                            ->native(false)
                             ->options(AppointmentStatus::class)
                             ->visibleOn(Pages\EditAppointment::class),
                     ]
